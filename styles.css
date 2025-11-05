@@ -3089,6 +3089,14 @@ h1, h2, h3, h4, h5, h6 {
     html {
         font-size: 13px;
     }
+
+    .nav-logo {
+        font-size: 1.125rem;
+    }
+    
+    .nav-logo span {
+        font-size: 1.25rem;
+    }
     
     .hero-title {
         font-size: 1.5rem;
