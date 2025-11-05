@@ -68,8 +68,8 @@ document.querySelectorAll('.nav-link').forEach(link => {
     });
 });
 
-// ============================================
-// SMOOTH SCROLLING
+/// ============================================
+// SMOOTH SCROLLING (MODERN METHOD)
 // ============================================
 
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -79,11 +79,10 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         
         if (target) {
             const headerOffset = 80;
-            const elementPosition = target.getBoundingClientOffset().top;
-            const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+            const elementPosition = target.offsetTop - headerOffset;
             
             window.scrollTo({
-                top: offsetPosition,
+                top: elementPosition,
                 behavior: 'smooth'
             });
         }
