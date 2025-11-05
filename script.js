@@ -24,7 +24,7 @@ window.addEventListener('scroll', () => {
 });
 
 // ============================================
-// MOBILE MENU
+// MOBILE MENU (FIXED - Scrolling Works!)
 // ============================================
 
 const hamburger = document.getElementById('hamburger');
@@ -36,13 +36,6 @@ if (hamburger && navMenu) {
         e.stopPropagation();
         hamburger.classList.toggle('active');
         navMenu.classList.toggle('active');
-        
-        // Prevent body scroll when menu is open
-        if (navMenu.classList.contains('active')) {
-            body.style.overflow = 'hidden';
-        } else {
-            body.style.overflow = '';
-        }
     });
     
     // Close menu when clicking outside
@@ -50,20 +43,49 @@ if (hamburger && navMenu) {
         if (navMenu.classList.contains('active') && 
             !navMenu.contains(e.target) && 
             !hamburger.contains(e.target)) {
-            hamburger.classList.remove('active');
-            navMenu.classList.remove('active');
-            body.style.overflow = '';
+            closeMenu();
         }
     });
 }
 
-// Close menu when clicking on a link
+// Function to close menu
+function closeMenu() {
+    if (hamburger && navMenu) {
+        hamburger.classList.remove('active');
+        navMenu.classList.remove('active');
+    }
+}
+
+// Close menu when clicking on a link and scroll
 document.querySelectorAll('.nav-link').forEach(link => {
-    link.addEventListener('click', () => {
-        if (navMenu.classList.contains('active')) {
-            navMenu.classList.remove('active');
-            hamburger.classList.remove('active');
-            body.style.overflow = '';
+    link.addEventListener('click', (e) => {
+        const href = link.getAttribute('href');
+        
+        // Only handle if it's an anchor link
+        if (href && href.startsWith('#')) {
+            e.preventDefault();
+            
+            // Close menu first
+            closeMenu();
+            
+            // Small delay to allow menu to close, then scroll
+            setTimeout(() => {
+                const target = document.querySelector(href);
+                if (target) {
+                    const headerOffset = 80;
+                    const targetPosition = target.offsetTop - headerOffset;
+                    
+                    window.scrollTo({
+                        top: targetPosition,
+                        behavior: 'smooth'
+                    });
+                    
+                    // Update URL
+                    if (history.pushState) {
+                        history.pushState(null, null, href);
+                    }
+                }
+            }, 300); // Wait for menu close animation
         }
     });
 });
