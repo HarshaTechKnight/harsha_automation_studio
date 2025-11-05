@@ -29,19 +29,42 @@ window.addEventListener('scroll', () => {
 
 const hamburger = document.getElementById('hamburger');
 const navMenu = document.getElementById('nav-menu');
+const body = document.body;
 
-if (hamburger) {
-    hamburger.addEventListener('click', () => {
-        navMenu.classList.toggle('active');
+if (hamburger && navMenu) {
+    hamburger.addEventListener('click', (e) => {
+        e.stopPropagation();
         hamburger.classList.toggle('active');
+        navMenu.classList.toggle('active');
+        
+        // Prevent body scroll when menu is open
+        if (navMenu.classList.contains('active')) {
+            body.style.overflow = 'hidden';
+        } else {
+            body.style.overflow = '';
+        }
+    });
+    
+    // Close menu when clicking outside
+    document.addEventListener('click', (e) => {
+        if (navMenu.classList.contains('active') && 
+            !navMenu.contains(e.target) && 
+            !hamburger.contains(e.target)) {
+            hamburger.classList.remove('active');
+            navMenu.classList.remove('active');
+            body.style.overflow = '';
+        }
     });
 }
 
 // Close menu when clicking on a link
 document.querySelectorAll('.nav-link').forEach(link => {
     link.addEventListener('click', () => {
-        navMenu.classList.remove('active');
-        hamburger.classList.remove('active');
+        if (navMenu.classList.contains('active')) {
+            navMenu.classList.remove('active');
+            hamburger.classList.remove('active');
+            body.style.overflow = '';
+        }
     });
 });
 
@@ -51,27 +74,18 @@ document.querySelectorAll('.nav-link').forEach(link => {
 
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
-        const href = this.getAttribute('href');
-        
-        // Skip if href is just "#" or empty
-        if (!href || href === '#') return;
-        
         e.preventDefault();
-        const target = document.querySelector(href);
+        const target = document.querySelector(this.getAttribute('href'));
         
         if (target) {
-            const headerHeight = 80; // Height of fixed header
-            const targetPosition = target.offsetTop - headerHeight;
+            const headerOffset = 80;
+            const elementPosition = target.getBoundingClientOffset().top;
+            const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
             
             window.scrollTo({
-                top: targetPosition,
+                top: offsetPosition,
                 behavior: 'smooth'
             });
-            
-            // Update URL without jumping
-            if (history.pushState) {
-                history.pushState(null, null, href);
-            }
         }
     });
 });
