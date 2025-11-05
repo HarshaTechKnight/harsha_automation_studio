@@ -2499,6 +2499,10 @@ h1, h2, h3, h4, h5, h6 {
     html {
         font-size: 15px;
     }
+
+    .nav-logo {
+        font-size: 1.25rem;
+    }
     
     .nav-menu,
     .nav-cta {
@@ -2654,7 +2658,7 @@ h1, h2, h3, h4, h5, h6 {
     }
     
     .nav-logo span {
-        display: none;
+        font-size: 1.25rem;
     }
     
     .nav-logo i {
@@ -2998,6 +3002,18 @@ h1, h2, h3, h4, h5, h6 {
     
     :root {
         --section-padding: 50px;
+    }
+
+    .nav-logo {
+        font-size: 1.25rem;
+    }
+    
+    .nav-logo span {
+        font-size: 1.375rem;
+    }
+    
+    .nav-logo i {
+        font-size: 1.875rem;
     }
     
     .hero-title {
